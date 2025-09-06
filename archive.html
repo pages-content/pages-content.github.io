@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Cheroliv - Développeur Formateur | Ingénierie Pédagogique</title>
+
+        <script>
+          // IIFE to avoid polluting global scope
+          (function() {
+            try {
+              const theme = localStorage.getItem('theme');
+              if (theme) {
+                document.documentElement.setAttribute('data-bs-theme', theme);
+              }
+            } catch (e) {
+              // Reading from localStorage can fail in private browsing mode on some browsers
+              console.warn('Could not set theme from localStorage', e);
+            }
+          })();
+        </script>
+
+        <!-- Bootstrap 5.3 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+        <!-- Custom CSS -->
+        <link href="css/styles.css" rel="stylesheet" />
+
+
+        <link href="css/asciidoctor.css" rel="stylesheet"/>
+
+
+
+        <!-- Favicon -->
+        <link rel="shortcut icon"
+              href="/img/cheroliv_logo_icon.png"/>
+
+        
+
+        <!-- Meta tags pour SEO -->
+        <meta name="description" content="Développeur formateur spécialisé en ingénierie pédagogique. Conception et développement de solutions e-learning innovantes."/>
+        <meta name="keywords" content="développement, formation, e-learning, ingénierie pédagogique, JavaScript, Bootstrap"/>
+        <meta name="author" content="Cheroliv"/>
+
+    </head>
+	<body onload="prettyPrint()">
+    <div id="wrap">
+    	<div>
+            <!-- Navigation -->
+            <nav class="navbar navbar-expand-lg fixed-top bg-light-theme">
+                <div class="container">
+                    <a class="navbar-brand fw-bold" href="index.html#home">
+                        <i class="bi bi-code-slash me-2"></i>
+                        Cheroliv
+                    </a>
+
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav"
+                            aria-controls="navbarNav"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto align-items-start">
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html#home">Accueil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html#about">À propos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html#services">Services</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html#expertise">Expertise</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html#portfolio">Portfolio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html#formations">Formations</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="blog.html">Blog</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html#contact">Contact</a>
+                            </li>
+                        </ul>
+                        <!-- Theme Switcher moved outside the ul for simpler flexbox calculation -->
+                        <div class="nav-item dropdown theme-switcher-container ms-lg-3">
+                            <button class="btn btn-outline-secondary dropdown-toggle theme-dropdown-btn"
+                                    type="button"
+                                    id="themeDropdown"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                    aria-label="Sélectionner le thème de l'interface">
+                                <i class="bi bi-sun"></i>
+                                <span id="current-theme" class="visually-hidden">Light</span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="themeDropdown">
+                                <li><a class="dropdown-item theme-option"
+                                       href="#"
+                                       data-theme="light">
+                                    <i class="bi bi-sun me-2"></i>Light
+                                </a></li>
+                                <li><a class="dropdown-item theme-option" href="#" data-theme="dark">
+                                    <i class="bi bi-moon me-2"></i>Dark
+                                </a></li>
+                                <li><a class="dropdown-item theme-option" href="#" data-theme="high-contrast">
+                                    <i class="bi bi-circle-half me-2"></i>High Contrast
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+		<div class="container main-content-padding">
+			<div class="page-header">
+				<h1>Blog Archive</h1>
+			</div>
+	
+			
+				
+					<h3>July 2025</h3>
+
+					<h4>
+						<span class="font-weight-bold">19</span> -
+						<a href="blog/2025/0087_pypi_cicd_part_3_post.html">CI/CD Python – Partie 3 : Aller plus loin avec Poetry, Docker et la publication avancée</a>
+					</h4>
+
+					
+						
+							
+
+							<h4>
+								<span class="font-weight-bold">18</span> -
+								<a href="blog/2025/0086_pypi_cicd_part_2_post.html">Partie 2 : Industrialiser et sécuriser un pipeline CI/CD Python avancé</a>
+							</h4>
+						
+					
+						
+							
+
+							<h4>
+								<span class="font-weight-bold">17</span> -
+								<a href="blog/2025/0085_pypi_cicd_part_1_post.html">Partie 1 : Mettre en place un pipeline CI/CD simple pour Python et PyPI</a>
+							</h4>
+						
+					
+						
+							
+
+							<h4>
+								<span class="font-weight-bold">16</span> -
+								<a href="blog/2025/0084_disco_bot_discord_python_post.html">Développement d&#39;un Bot Discord Musical : Architecture Fonctionnelle et Log Driven Development</a>
+							</h4>
+						
+					
+						
+							
+								<p></p>
+								<h3>October 2013</h3>
+							
+
+							<h4>
+								<span class="font-weight-bold">17</span> -
+								<a href="blog/2013/fourth-post.html">Fourth Post</a>
+							</h4>
+						
+					
+						
+							
+								<p></p>
+								<h3>September 2013</h3>
+							
+
+							<h4>
+								<span class="font-weight-bold">26</span> -
+								<a href="blog/2013/third-post.html">Third Post</a>
+							</h4>
+						
+					
+						
+							
+								<p></p>
+								<h3>August 2013</h3>
+							
+
+							<h4>
+								<span class="font-weight-bold">25</span> -
+								<a href="blog/2013/second-post.html">Second Post</a>
+							</h4>
+						
+					
+						
+							
+								<p></p>
+								<h3>July 2013</h3>
+							
+
+							<h4>
+								<span class="font-weight-bold">24</span> -
+								<a href="blog/2013/first-post.html">First Post</a>
+							</h4>
+						
+					
+				
+			
+
+		</div>
+	</div>
+	
+	<div>
+    <!-- Footer -->
+    <footer class="bg-light-theme py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2018-<span>2025</span> Cheroliv. Tous droits
+                        réservés.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3" aria-label="Profil LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="text-white me-3" aria-label="Profil GitHub"><i class="bi bi-github"></i></a>
+                    <a href="#" class="text-white" aria-label="Envoyer un e-mail"><i class="bi bi-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+</div>
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="btn btn-primary shadow-sm" aria-label="Retour en haut de page">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+    </body>
+</html>

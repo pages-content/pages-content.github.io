@@ -1,0 +1,2648 @@
+<?xml version="1.0"?>
+<rss version="2.0"
+     xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>JBake</title>
+        <link >https://pages-content.github.io/</link>
+        <atom:link href="https://pages-content.github.io//feed.xml" rel="self" type="application/rss+xml" />
+        <description>JBake Bootstrap Template</description>
+        <language>en-gb</language>
+        <pubDate>Sat, 6 Sep 2025 14:50:06 +0000</pubDate>
+        <lastBuildDate>Sat, 6 Sep 2025 14:50:06 +0000</lastBuildDate>
+
+        <item>
+            <title>CI/CD Python – Partie 3 : Aller plus loin avec Poetry, Docker et la publication avancée</title>
+            <link >https://pages-content.github.io//blog/2025/0087_pypi_cicd_part_3_post.html</link>
+            <pubDate>Sat, 19 Jul 2025 00:00:00 +0000</pubDate>
+            <guid isPermaLink="false">blog/2025/0087_pypi_cicd_part_3_post.html</guid>
+            <description>&amp;lt;div id=&amp;quot;toc&amp;quot; class=&amp;quot;toc&amp;quot;&amp;gt;
+&amp;lt;div id=&amp;quot;toctitle&amp;quot;&amp;gt;Table of Contents&amp;lt;/div&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel1&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_intégration_avec_poetry&amp;quot;&amp;gt;Intégration avec Poetry&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_installation_de_poetry&amp;quot;&amp;gt;Installation de Poetry&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_initialisation_du_projet&amp;quot;&amp;gt;Initialisation du projet&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_ajout_et_installation_de_dépendances&amp;quot;&amp;gt;Ajout et installation de dépendances&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_publication_avec_poetry&amp;quot;&amp;gt;Publication avec Poetry&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_builds_reproductibles_avec_docker&amp;quot;&amp;gt;Builds reproductibles avec Docker&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_exemple_de_dockerfile&amp;quot;&amp;gt;Exemple de Dockerfile&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_intégration_dans_github_actions&amp;quot;&amp;gt;Intégration dans GitHub Actions&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_publication_conditionnelle&amp;quot;&amp;gt;Publication conditionnelle&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_automatisation_des_dépendances_avec_renovate_et_dependabot&amp;quot;&amp;gt;Automatisation des dépendances avec Renovate et Dependabot&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_dependabot&amp;quot;&amp;gt;Dependabot&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_renovate&amp;quot;&amp;gt;Renovate&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_diagrammes_plantuml&amp;quot;&amp;gt;Diagrammes PlantUML&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_cas_dusage_cicd_avancé&amp;quot;&amp;gt;Cas d’Usage – CI/CD avancé&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_séquence_publication_conditionnelle&amp;quot;&amp;gt;Séquence – Publication conditionnelle&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_états_pipeline_cicd&amp;quot;&amp;gt;États – Pipeline CI/CD&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_déploiement_architecture_cicd&amp;quot;&amp;gt;Déploiement – Architecture CI/CD&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_conclusion&amp;quot;&amp;gt;Conclusion&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;preamble&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Dans les deux premières parties de cette série, nous avons :
+- Établi un pipeline CI/CD fonctionnel pour une application Python avec GitHub Actions et PyPI.
+- Industrialisé ce pipeline avec des tests multi-versions, une publication progressive via Test PyPI, et des outils de qualité et de sécurité.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Dans cette troisième partie, nous allons aller &amp;lt;strong&amp;gt;au-delà de la simple publication sur PyPI&amp;lt;/strong&amp;gt; pour construire une chaîne de CI/CD complète, robuste et professionnelle avec :
+- &amp;lt;strong&amp;gt;Poetry&amp;lt;/strong&amp;gt; pour un packaging moderne et une gestion optimisée des dépendances.
+- &amp;lt;strong&amp;gt;Docker&amp;lt;/strong&amp;gt; pour créer des builds reproductibles et multi-plateformes.
+- &amp;lt;strong&amp;gt;Publication conditionnelle&amp;lt;/strong&amp;gt; pour gérer des scénarios comme les release candidates.
+- &amp;lt;strong&amp;gt;Outils d’automatisation&amp;lt;/strong&amp;gt; (Renovate, Dependabot) pour maintenir le pipeline à jour sans effort.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_intégration_avec_poetry&amp;quot;&amp;gt;Intégration avec Poetry&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Poetry remplace les anciens outils de packaging (setup.py, requirements.txt) en centralisant la gestion des dépendances et du build dans &amp;lt;code&amp;gt;pyproject.toml&amp;lt;/code&amp;gt;.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_installation_de_poetry&amp;quot;&amp;gt;Installation de Poetry&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;shell&amp;quot;&amp;gt;# Installer Poetry
+curl -sSL https://install.python-poetry.org | python3 -
+# Vérifier la version
+poetry --version&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_initialisation_du_projet&amp;quot;&amp;gt;Initialisation du projet&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;shell&amp;quot;&amp;gt;# Initialiser un nouveau projet avec Poetry
+poetry init
+# Suivre l&amp;#39;assistant pour renseigner : nom, version, description, licence, dépendances.&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cela génère un fichier &amp;lt;code&amp;gt;pyproject.toml&amp;lt;/code&amp;gt; :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;toml&amp;quot;&amp;gt;[tool.poetry]
+name = &amp;quot;playlist-downloader&amp;quot;
+version = &amp;quot;0.1.0&amp;quot;
+description = &amp;quot;CLI tool for managing YouTube playlists&amp;quot;
+authors = [&amp;quot;Christophe Hérolivier &amp;amp;lt;cheroliv@example.com&amp;amp;gt;&amp;quot;]
+
+[tool.poetry.dependencies]
+python = &amp;quot;&amp;amp;gt;=3.8&amp;quot;
+typer = &amp;quot;^0.9.0&amp;quot;
+yt-dlp = &amp;quot;^2023.7.6&amp;quot;
+google-api-python-client = &amp;quot;^2.0.0&amp;quot;
+google-auth-oauthlib = &amp;quot;^1.0.0&amp;quot;
+
+[tool.poetry.group.dev.dependencies]
+pytest = &amp;quot;^7.0&amp;quot;
+mypy = &amp;quot;^1.0&amp;quot;
+bandit = &amp;quot;^1.7&amp;quot;
+safety = &amp;quot;^2.3&amp;quot;
+black = &amp;quot;^23.0&amp;quot;
+ruff = &amp;quot;^0.1&amp;quot;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_ajout_et_installation_de_dépendances&amp;quot;&amp;gt;Ajout et installation de dépendances&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;shell&amp;quot;&amp;gt;poetry add typer yt-dlp google-api-python-client google-auth-oauthlib
+poetry add --group dev pytest mypy black bandit safety ruff&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_publication_avec_poetry&amp;quot;&amp;gt;Publication avec Poetry&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Poetry gère nativement la publication :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;shell&amp;quot;&amp;gt;# Publication sur Test PyPI
+poetry publish --build --repository test-pypi
+
+# Publication sur PyPI
+poetry publish --build&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cette commande utilise automatiquement les informations présentes dans &amp;lt;code&amp;gt;pyproject.toml&amp;lt;/code&amp;gt;.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_builds_reproductibles_avec_docker&amp;quot;&amp;gt;Builds reproductibles avec Docker&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Pour assurer des exécutions identiques en développement, CI/CD et production, Docker s’intègre parfaitement avec Poetry.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_exemple_de_dockerfile&amp;quot;&amp;gt;Exemple de Dockerfile&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;dockerfile&amp;quot;&amp;gt;FROM python:3.11-slim
+
+WORKDIR /app
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry
+RUN poetry install --no-root --only main
+
+COPY . .
+
+CMD [&amp;quot;poetry&amp;quot;, &amp;quot;run&amp;quot;, &amp;quot;python&amp;quot;, &amp;quot;cli.py&amp;quot;]&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cela garantit :
+- Un environnement Python figé.
+- Des dépendances verrouillées via &amp;lt;code&amp;gt;poetry.lock&amp;lt;/code&amp;gt;.
+- Une image exécutable sur tout système supportant Docker.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_intégration_dans_github_actions&amp;quot;&amp;gt;Intégration dans GitHub Actions&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;name: Docker Build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t ghcr.io/${{ github.repository }}:latest .
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.repository }}:latest&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_publication_conditionnelle&amp;quot;&amp;gt;Publication conditionnelle&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Dans un pipeline professionnel, il faut pouvoir publier uniquement dans certains cas :
+- Release candidates vers Test PyPI.
+- Versions stables vers PyPI.
+- Builds Docker déclenchés uniquement pour &amp;lt;code&amp;gt;main&amp;lt;/code&amp;gt;.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Publish to Test PyPI
+  if: contains(github.ref, &amp;#39;-rc&amp;#39;)
+  run: poetry publish --build --repository test-pypi
+
+- name: Publish to PyPI
+  if: startsWith(github.ref, &amp;#39;refs/tags/v&amp;#39;)
+  run: poetry publish --build&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cette approche évite les publications accidentelles.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_automatisation_des_dépendances_avec_renovate_et_dependabot&amp;quot;&amp;gt;Automatisation des dépendances avec Renovate et Dependabot&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Pour éviter que vos dépendances deviennent obsolètes, intégrez des outils de mise à jour automatique.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_dependabot&amp;quot;&amp;gt;Dependabot&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;version: 2
+updates:
+  - package-ecosystem: &amp;quot;pip&amp;quot;
+    directory: &amp;quot;/&amp;quot;
+    schedule:
+      interval: &amp;quot;weekly&amp;quot;
+  - package-ecosystem: &amp;quot;github-actions&amp;quot;
+    directory: &amp;quot;/&amp;quot;
+    schedule:
+      interval: &amp;quot;weekly&amp;quot;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Dependabot ouvre des PR chaque semaine pour mettre à jour les dépendances Python et GitHub Actions.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_renovate&amp;quot;&amp;gt;Renovate&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;json&amp;quot;&amp;gt;{
+  &amp;quot;extends&amp;quot;: [&amp;quot;config:base&amp;quot;],
+  &amp;quot;packageRules&amp;quot;: [
+    {
+      &amp;quot;matchManagers&amp;quot;: [&amp;quot;pip&amp;quot;],
+      &amp;quot;groupName&amp;quot;: &amp;quot;python-dependencies&amp;quot;,
+      &amp;quot;schedule&amp;quot;: [&amp;quot;before 6am on monday&amp;quot;]
+    }
+  ]
+}&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Renovate permet un contrôle plus fin : regroupement de dépendances, planification, et règles avancées.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_diagrammes_plantuml&amp;quot;&amp;gt;Diagrammes PlantUML&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_cas_dusage_cicd_avancé&amp;quot;&amp;gt;Cas d’Usage – CI/CD avancé&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/usecase-cicd.svg&amp;quot; alt=&amp;quot;usecase cicd&amp;quot; width=&amp;quot;819&amp;quot; height=&amp;quot;317&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_séquence_publication_conditionnelle&amp;quot;&amp;gt;Séquence – Publication conditionnelle&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/sequence-cicd.svg&amp;quot; alt=&amp;quot;sequence cicd&amp;quot; width=&amp;quot;264&amp;quot; height=&amp;quot;609&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_états_pipeline_cicd&amp;quot;&amp;gt;États – Pipeline CI/CD&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/states-cicd.svg&amp;quot; alt=&amp;quot;states cicd&amp;quot; width=&amp;quot;284&amp;quot; height=&amp;quot;608&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_déploiement_architecture_cicd&amp;quot;&amp;gt;Déploiement – Architecture CI/CD&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/deployment-cicd.svg&amp;quot; alt=&amp;quot;deployment cicd&amp;quot; width=&amp;quot;535&amp;quot; height=&amp;quot;288&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_conclusion&amp;quot;&amp;gt;Conclusion&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Dans cette troisième partie, nous avons vu comment :
+- Moderniser le packaging Python avec Poetry.
+- Garantir des builds reproductibles via Docker.
+- Mettre en place une publication conditionnelle.
+- Automatiser la mise à jour des dépendances.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Vous disposez désormais d’un pipeline CI/CD &amp;lt;strong&amp;gt;complet, industrialisé et sécurisé&amp;lt;/strong&amp;gt;, prêt à évoluer avec vos projets.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;</description>
+        </item><item>
+            <title>Partie 2 : Industrialiser et sécuriser un pipeline CI/CD Python avancé</title>
+            <link >https://pages-content.github.io//blog/2025/0086_pypi_cicd_part_2_post.html</link>
+            <pubDate>Fri, 18 Jul 2025 00:00:00 +0000</pubDate>
+            <guid isPermaLink="false">blog/2025/0086_pypi_cicd_part_2_post.html</guid>
+            <description>&amp;lt;div id=&amp;quot;toc&amp;quot; class=&amp;quot;toc&amp;quot;&amp;gt;
+&amp;lt;div id=&amp;quot;toctitle&amp;quot;&amp;gt;Sommaire&amp;lt;/div&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel1&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_introduction&amp;quot;&amp;gt;1. Introduction&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_architecture_du_pipeline_cicd&amp;quot;&amp;gt;2. Architecture du Pipeline CI/CD&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_structure_du_projet&amp;quot;&amp;gt;3. Structure du Projet&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_configuration_du_package_avec_pyproject_toml&amp;quot;&amp;gt;4. Configuration du Package avec pyproject.toml&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_workflow_de_cicd_tests_et_qualité&amp;quot;&amp;gt;5. Workflow de CI/CD - Tests et Qualité&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_workflow_de_release_et_déploiement&amp;quot;&amp;gt;6. Workflow de Release et Déploiement&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_diagrammes_darchitecture&amp;quot;&amp;gt;7. Diagrammes d&amp;amp;#8217;Architecture&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_diagramme_de_séquence_processus_de_release&amp;quot;&amp;gt;7.1. Diagramme de Séquence - Processus de Release&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_diagramme_détats_cycle_de_vie_du_package&amp;quot;&amp;gt;7.2. Diagramme d&amp;amp;#8217;États - Cycle de Vie du Package&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_diagramme_de_déploiement_infrastructure_cicd&amp;quot;&amp;gt;7.3. Diagramme de Déploiement - Infrastructure CI/CD&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_objets_et_modèles_du_pipeline&amp;quot;&amp;gt;8. Objets et Modèles du Pipeline&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_diagramme_de_classes_modèles_cicd&amp;quot;&amp;gt;8.1. Diagramme de Classes - Modèles CI/CD&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_configuration_des_secrets&amp;quot;&amp;gt;9. Configuration des Secrets&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_secrets_github_actions&amp;quot;&amp;gt;9.1. Secrets GitHub Actions&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_génération_des_tokens_pypi&amp;quot;&amp;gt;9.2. Génération des Tokens PyPI&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_scripts_de_développement_local&amp;quot;&amp;gt;10. Scripts de Développement Local&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_makefile&amp;quot;&amp;gt;10.1. Makefile&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_script_de_version&amp;quot;&amp;gt;10.2. Script de Version&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_bonnes_pratiques_et_recommandations&amp;quot;&amp;gt;11. Bonnes Pratiques et Recommandations&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_versioning_sémantique&amp;quot;&amp;gt;11.1. Versioning Sémantique&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_stratégie_de_branching&amp;quot;&amp;gt;11.2. Stratégie de Branching&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_tests_et_couverture&amp;quot;&amp;gt;11.3. Tests et Couverture&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_sécurité&amp;quot;&amp;gt;11.4. Sécurité&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_monitoring_et_observabilité&amp;quot;&amp;gt;12. Monitoring et Observabilité&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_métriques_de_pipeline&amp;quot;&amp;gt;12.1. Métriques de Pipeline&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_notifications&amp;quot;&amp;gt;12.2. Notifications&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_conclusion&amp;quot;&amp;gt;13. Conclusion&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_ressources_complémentaires&amp;quot;&amp;gt;14. Ressources Complémentaires&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;preamble&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;title&amp;quot;&amp;gt;Objectif :&amp;lt;/div&amp;gt;
+&amp;lt;p&amp;gt;Transformer un pipeline simple en pipeline industriel robuste, respectant les standards modernes du packaging et de l’ingénierie logicielle.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_introduction&amp;quot;&amp;gt;1. Introduction&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Dans la première partie de cette série, nous avons construit un pipeline CI/CD simple mais efficace pour automatiser les tests et la publication d’un package Python sur PyPI.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Il est maintenant temps de professionnaliser ce pipeline.
+Dans cette seconde partie, nous allons :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Migrer vers le standard moderne pyproject.toml,&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Ajouter des outils de qualité et de sécurité (Black, Mypy, Bandit, Safety),&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Mettre en place des tests multi-versions,&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Intégrer un déploiement progressif via Test PyPI,&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Automatiser le versioning et améliorer la surveillance du pipeline.&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Préparez-vous à passer d’un pipeline fonctionnel à une infrastructure CI/CD professionnelle.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Déployer une application Python sur PyPI nécessite un pipeline CI/CD robuste qui automatise les tests, la construction et la publication des packages.
+Cet article détaille la mise en place d&amp;amp;#8217;un pipeline complet utilisant GitHub Actions pour une application CLI Python, en s&amp;amp;#8217;appuyant sur les bonnes pratiques de l&amp;amp;#8217;écosystème Python moderne.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_architecture_du_pipeline_cicd&amp;quot;&amp;gt;2. Architecture du Pipeline CI/CD&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le pipeline que nous allons construire suit une approche en plusieurs étapes :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/diag-plantuml-md5-7c661f88b9476d6adca6ed0f09d1f513.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;989&amp;quot; height=&amp;quot;803&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_structure_du_projet&amp;quot;&amp;gt;3. Structure du Projet&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Une application CLI Python prête pour la distribution doit respecter une structure standardisée :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;text&amp;quot;&amp;gt;playlist-downloader/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── release.yml
+│       └── security.yml
+├── src/
+│   └── playlist_downloader/
+│       ├── __init__.py
+│       ├── cli.py
+│       ├── core/
+│       └── adapters/
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── conftest.py
+├── docs/
+├── pyproject.toml
+├── requirements.txt
+├── requirements-dev.txt
+├── MANIFEST.in
+├── README.md
+├── LICENSE
+└── CHANGELOG.md&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_configuration_du_package_avec_pyproject_toml&amp;quot;&amp;gt;4. Configuration du Package avec pyproject.toml&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le fichier &amp;lt;code&amp;gt;pyproject.toml&amp;lt;/code&amp;gt; est le standard moderne pour configurer les packages Python :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;toml&amp;quot;&amp;gt;[build-system]
+requires = [&amp;quot;setuptools&amp;amp;gt;=45&amp;quot;, &amp;quot;wheel&amp;quot;, &amp;quot;setuptools_scm&amp;amp;gt;=6.2&amp;quot;]
+build-backend = &amp;quot;setuptools.build_meta&amp;quot;
+
+[project]
+name = &amp;quot;playlist-downloader&amp;quot;
+authors = [
+    {name = &amp;quot;Christophe Hérolivier&amp;quot;, email = &amp;quot;cheroliv@example.com&amp;quot;},
+]
+description = &amp;quot;CLI tool for YouTube playlist management&amp;quot;
+readme = &amp;quot;README.md&amp;quot;
+requires-python = &amp;quot;&amp;amp;gt;=3.8&amp;quot;
+keywords = [&amp;quot;youtube&amp;quot;, &amp;quot;playlist&amp;quot;, &amp;quot;cli&amp;quot;, &amp;quot;downloader&amp;quot;]
+license = {text = &amp;quot;MIT&amp;quot;}
+classifiers = [
+    &amp;quot;Development Status :: 4 - Beta&amp;quot;,
+    &amp;quot;Environment :: Console&amp;quot;,
+    &amp;quot;Intended Audience :: End Users/Desktop&amp;quot;,
+    &amp;quot;License :: OSI Approved :: MIT License&amp;quot;,
+    &amp;quot;Operating System :: OS Independent&amp;quot;,
+    &amp;quot;Programming Language :: Python :: 3&amp;quot;,
+    &amp;quot;Programming Language :: Python :: 3.8&amp;quot;,
+    &amp;quot;Programming Language :: Python :: 3.9&amp;quot;,
+    &amp;quot;Programming Language :: Python :: 3.10&amp;quot;,
+    &amp;quot;Programming Language :: Python :: 3.11&amp;quot;,
+    &amp;quot;Topic :: Multimedia :: Sound/Audio&amp;quot;,
+    &amp;quot;Topic :: Utilities&amp;quot;,
+]
+dependencies = [
+    &amp;quot;typer&amp;amp;gt;=0.9.0&amp;quot;,
+    &amp;quot;yt-dlp&amp;amp;gt;=2023.7.6&amp;quot;,
+    &amp;quot;google-api-python-client&amp;amp;gt;=2.0.0&amp;quot;,
+    &amp;quot;google-auth-oauthlib&amp;amp;gt;=1.0.0&amp;quot;,
+    &amp;quot;pyyaml&amp;amp;gt;=6.0&amp;quot;,
+    &amp;quot;rich&amp;amp;gt;=13.0.0&amp;quot;,
+]
+dynamic = [&amp;quot;version&amp;quot;]
+
+[project.optional-dependencies]
+dev = [
+    &amp;quot;pytest&amp;amp;gt;=7.0.0&amp;quot;,
+    &amp;quot;pytest-cov&amp;amp;gt;=4.0.0&amp;quot;,
+    &amp;quot;pytest-mock&amp;amp;gt;=3.10.0&amp;quot;,
+    &amp;quot;black&amp;amp;gt;=23.0.0&amp;quot;,
+    &amp;quot;flake8&amp;amp;gt;=6.0.0&amp;quot;,
+    &amp;quot;mypy&amp;amp;gt;=1.0.0&amp;quot;,
+    &amp;quot;pre-commit&amp;amp;gt;=3.0.0&amp;quot;,
+    &amp;quot;tox&amp;amp;gt;=4.0.0&amp;quot;,
+]
+test = [
+    &amp;quot;pytest&amp;amp;gt;=7.0.0&amp;quot;,
+    &amp;quot;pytest-cov&amp;amp;gt;=4.0.0&amp;quot;,
+    &amp;quot;pytest-mock&amp;amp;gt;=3.10.0&amp;quot;,
+]
+
+[project.urls]
+Homepage = &amp;quot;https://github.com/cheroliv/playlist-downloader&amp;quot;
+Documentation = &amp;quot;https://github.com/cheroliv/playlist-downloader#readme&amp;quot;
+Repository = &amp;quot;https://github.com/cheroliv/playlist-downloader.git&amp;quot;
+&amp;quot;Bug Tracker&amp;quot; = &amp;quot;https://github.com/cheroliv/playlist-downloader/issues&amp;quot;
+
+[project.scripts]
+playlist-downloader = &amp;quot;playlist_downloader.cli:main&amp;quot;
+
+[tool.setuptools_scm]
+write_to = &amp;quot;src/playlist_downloader/_version.py&amp;quot;
+
+[tool.setuptools.packages.find]
+where = [&amp;quot;src&amp;quot;]
+
+[tool.pytest.ini_options]
+testpaths = [&amp;quot;tests&amp;quot;]
+python_files = [&amp;quot;test_*.py&amp;quot;]
+python_classes = [&amp;quot;Test*&amp;quot;]
+python_functions = [&amp;quot;test_*&amp;quot;]
+addopts = [
+    &amp;quot;--cov=src/playlist_downloader&amp;quot;,
+    &amp;quot;--cov-report=html&amp;quot;,
+    &amp;quot;--cov-report=term-missing&amp;quot;,
+    &amp;quot;--cov-fail-under=85&amp;quot;,
+]
+
+[tool.black]
+line-length = 88
+target-version = [&amp;#39;py38&amp;#39;]
+include = &amp;#39;\.pyi?$&amp;#39;
+extend-exclude = &amp;#39;&amp;#39;&amp;#39;
+/(
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+&amp;#39;&amp;#39;&amp;#39;
+
+[tool.mypy]
+python_version = &amp;quot;3.8&amp;quot;
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    &amp;quot;yt_dlp.*&amp;quot;,
+    &amp;quot;googleapiclient.*&amp;quot;,
+    &amp;quot;google_auth_oauthlib.*&amp;quot;,
+]
+ignore_missing_imports = true&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_workflow_de_cicd_tests_et_qualité&amp;quot;&amp;gt;5. Workflow de CI/CD - Tests et Qualité&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le workflow principal (&amp;lt;code&amp;gt;ci.yml&amp;lt;/code&amp;gt;) exécute les tests sur plusieurs versions de Python :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [&amp;quot;3.8&amp;quot;, &amp;quot;3.9&amp;quot;, &amp;quot;3.10&amp;quot;, &amp;quot;3.11&amp;quot;]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/pip
+          ~/.cache/pre-commit
+        key: ${{ runner.os }}-pip-${{ hashFiles(&amp;#39;**/requirements*.txt&amp;#39;) }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e &amp;quot;.[dev]&amp;quot;
+
+    - name: Lint with flake8
+      run: |
+        flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 src tests --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+
+    - name: Check code formatting with Black
+      run: black --check src tests
+
+    - name: Type checking with mypy
+      run: mypy src
+
+    - name: Run tests with pytest
+      run: |
+        pytest tests/ -v --cov=src/playlist_downloader \
+          --cov-report=xml --cov-report=term-missing
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      if: matrix.python-version == &amp;#39;3.11&amp;#39;
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: &amp;quot;3.11&amp;quot;
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit[toml] safety
+
+    - name: Run security checks with bandit
+      run: bandit -r src/ -f json -o bandit-report.json
+
+    - name: Check dependencies with safety
+      run: safety check --json --output safety-report.json
+
+    - name: Upload security reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+
+  build:
+    needs: [test, security]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: &amp;quot;3.11&amp;quot;
+
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+
+    - name: Build package
+      run: python -m build
+
+    - name: Check package with twine
+      run: twine check dist/*
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: dist/&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_workflow_de_release_et_déploiement&amp;quot;&amp;gt;6. Workflow de Release et Déploiement&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le workflow de release (&amp;lt;code&amp;gt;release.yml&amp;lt;/code&amp;gt;) gère la publication automatique sur PyPI :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;name: Release
+
+on:
+  push:
+    tags:
+      - &amp;#39;v*.*.*&amp;#39;
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: &amp;#39;Deployment environment&amp;#39;
+        required: true
+        default: &amp;#39;test&amp;#39;
+        type: choice
+        options:
+        - test
+        - production
+
+env:
+  PYTHON_VERSION: &amp;quot;3.11&amp;quot;
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment || (startsWith(github.ref, &amp;#39;refs/tags/&amp;#39;) &amp;amp;amp;&amp;amp;amp; &amp;#39;production&amp;#39; || &amp;#39;test&amp;#39;) }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+
+    - name: Build package
+      run: python -m build
+
+    - name: Check package
+      run: twine check dist/*
+
+    - name: Publish to Test PyPI
+      if: github.event.inputs.environment == &amp;#39;test&amp;#39; || (startsWith(github.ref, &amp;#39;refs/tags/&amp;#39;) &amp;amp;amp;&amp;amp;amp; contains(github.ref, &amp;#39;rc&amp;#39;))
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+      run: |
+        twine upload --repository testpypi dist/*
+
+    - name: Publish to PyPI
+      if: github.event.inputs.environment == &amp;#39;production&amp;#39; || (startsWith(github.ref, &amp;#39;refs/tags/&amp;#39;) &amp;amp;amp;&amp;amp;amp; !contains(github.ref, &amp;#39;rc&amp;#39;))
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        twine upload dist/*
+
+    - name: Create GitHub Release
+      if: startsWith(github.ref, &amp;#39;refs/tags/&amp;#39;)
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: ${{ contains(github.ref, &amp;#39;rc&amp;#39;) }}
+
+  post-release:
+    needs: release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, &amp;#39;refs/tags/&amp;#39;)
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Test installation from PyPI
+      run: |
+        sleep 60  # Attendre la propagation sur PyPI
+        pip install playlist-downloader
+        playlist-downloader --version
+
+    - name: Update documentation
+      run: |
+        # Script pour mettre à jour la documentation
+        echo &amp;quot;Documentation updated for version ${GITHUB_REF#refs/tags/}&amp;quot;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_diagrammes_darchitecture&amp;quot;&amp;gt;7. Diagrammes d&amp;amp;#8217;Architecture&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_diagramme_de_séquence_processus_de_release&amp;quot;&amp;gt;7.1. Diagramme de Séquence - Processus de Release&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/diag-plantuml-md5-8e5219ce8920793948bdafac8a3427ec.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;886&amp;quot; height=&amp;quot;888&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_diagramme_détats_cycle_de_vie_du_package&amp;quot;&amp;gt;7.2. Diagramme d&amp;amp;#8217;États - Cycle de Vie du Package&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/diag-plantuml-md5-2d132096cb63b0042bccf620fc284f91.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;303&amp;quot; height=&amp;quot;1588&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_diagramme_de_déploiement_infrastructure_cicd&amp;quot;&amp;gt;7.3. Diagramme de Déploiement - Infrastructure CI/CD&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/diag-plantuml-md5-590851667decb6042a455cb888cc4200.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;681&amp;quot; height=&amp;quot;760&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_objets_et_modèles_du_pipeline&amp;quot;&amp;gt;8. Objets et Modèles du Pipeline&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_diagramme_de_classes_modèles_cicd&amp;quot;&amp;gt;8.1. Diagramme de Classes - Modèles CI/CD&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/diag-plantuml-md5-510e3cb608857126a0dcae824abe3148.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;831&amp;quot; height=&amp;quot;745&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_configuration_des_secrets&amp;quot;&amp;gt;9. Configuration des Secrets&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Pour que le pipeline fonctionne, vous devez configurer les secrets suivants dans GitHub :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_secrets_github_actions&amp;quot;&amp;gt;9.1. Secrets GitHub Actions&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;bash&amp;quot;&amp;gt;# Dans Settings &amp;amp;gt; Secrets and variables &amp;amp;gt; Actions
+
+# Token PyPI pour la production
+PYPI_API_TOKEN=pypi-...
+
+# Token Test PyPI pour les pré-releases
+TEST_PYPI_API_TOKEN=pypi-...
+
+# Token GitHub pour créer les releases
+GITHUB_TOKEN=(automatiquement fourni)
+
+# Token Codecov (optionnel)
+CODECOV_TOKEN=...&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_génération_des_tokens_pypi&amp;quot;&amp;gt;9.2. Génération des Tokens PyPI&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;bash&amp;quot;&amp;gt;# 1. Créer un compte sur PyPI et Test PyPI
+# 2. Aller dans Account Settings &amp;amp;gt; API tokens
+# 3. Créer un token avec scope &amp;quot;Entire account&amp;quot; ou spécifique au projet
+# 4. Format du token : pypi-AgEIcHlwaS5vcmc...&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_scripts_de_développement_local&amp;quot;&amp;gt;10. Scripts de Développement Local&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Pour faciliter le développement, créez des scripts utilitaires :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_makefile&amp;quot;&amp;gt;10.1. Makefile&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;makefile&amp;quot;&amp;gt;.PHONY: install test lint format security build clean release-test release-prod
+
+install:
+	pip install -e &amp;quot;.[dev]&amp;quot;
+
+test:
+	pytest tests/ -v --cov=src/playlist_downloader
+
+lint:
+	flake8 src tests
+	mypy src
+
+format:
+	black src tests
+
+security:
+	bandit -r src/
+	safety check
+
+build:
+	python -m build
+	twine check dist/*
+
+clean:
+	rm -rf build/ dist/ *.egg-info/
+	find . -type d -name __pycache__ -delete
+	find . -name &amp;quot;*.pyc&amp;quot; -delete
+
+release-test: clean build
+	twine upload --repository testpypi dist/*
+
+release-prod: clean build
+	twine upload dist/*
+
+pre-commit: format lint test security
+	@echo &amp;quot;✅ Prêt pour commit&amp;quot;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_script_de_version&amp;quot;&amp;gt;10.2. Script de Version&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;python&amp;quot;&amp;gt;#!/usr/bin/env python3
+&amp;quot;&amp;quot;&amp;quot;Script pour gérer les versions du projet.&amp;quot;&amp;quot;&amp;quot;
+
+import sys
+import subprocess
+from pathlib import Path
+
+def get_current_version():
+    &amp;quot;&amp;quot;&amp;quot;Récupère la version actuelle depuis git.&amp;quot;&amp;quot;&amp;quot;
+    try:
+        result = subprocess.run(
+            [&amp;quot;git&amp;quot;, &amp;quot;describe&amp;quot;, &amp;quot;--tags&amp;quot;, &amp;quot;--abbrev=0&amp;quot;],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError:
+        return &amp;quot;0.0.0&amp;quot;
+
+def create_version_tag(version, message=None):
+    &amp;quot;&amp;quot;&amp;quot;Crée un tag de version.&amp;quot;&amp;quot;&amp;quot;
+    if not version.startswith(&amp;#39;v&amp;#39;):
+        version = f&amp;#39;v{version}&amp;#39;
+
+    tag_message = message or f&amp;quot;Release {version}&amp;quot;
+
+    subprocess.run([&amp;quot;git&amp;quot;, &amp;quot;tag&amp;quot;, &amp;quot;-a&amp;quot;, version, &amp;quot;-m&amp;quot;, tag_message], check=True)
+    print(f&amp;quot;✅ Tag {version} créé&amp;quot;)
+
+    # Push le tag
+    subprocess.run([&amp;quot;git&amp;quot;, &amp;quot;push&amp;quot;, &amp;quot;origin&amp;quot;, version], check=True)
+    print(f&amp;quot;✅ Tag {version} poussé vers origin&amp;quot;)
+
+if __name__ == &amp;quot;__main__&amp;quot;:
+    if len(sys.argv) &amp;amp;lt; 2:
+        current = get_current_version()
+        print(f&amp;quot;Version actuelle: {current}&amp;quot;)
+        print(&amp;quot;Usage: python version.py &amp;amp;lt;new_version&amp;amp;gt; [message]&amp;quot;)
+        sys.exit(1)
+
+    new_version = sys.argv[1]
+    message = sys.argv[2] if len(sys.argv) &amp;amp;gt; 2 else None
+
+    create_version_tag(new_version, message)&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_bonnes_pratiques_et_recommandations&amp;quot;&amp;gt;11. Bonnes Pratiques et Recommandations&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_versioning_sémantique&amp;quot;&amp;gt;11.1. Versioning Sémantique&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Utilisez le versioning sémantique (SemVer) :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;code&amp;gt;MAJOR.MINOR.PATCH&amp;lt;/code&amp;gt; (ex: 1.2.3)&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;code&amp;gt;MAJOR&amp;lt;/code&amp;gt; : changements incompatibles&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;code&amp;gt;MINOR&amp;lt;/code&amp;gt; : nouvelles fonctionnalités compatibles&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;code&amp;gt;PATCH&amp;lt;/code&amp;gt; : corrections de bugs compatibles&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_stratégie_de_branching&amp;quot;&amp;gt;11.2. Stratégie de Branching&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;text&amp;quot;&amp;gt;main          ──●──●──●──●──●────●── (releases stables)
+               /       /          /
+develop    ──●──●──●──●──●──●──●──●── (développement)
+            /     /        /
+feature/xxx  ●──●──●──●──●──/ (fonctionnalités)&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_tests_et_couverture&amp;quot;&amp;gt;11.3. Tests et Couverture&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Couverture de code minimum : 85%&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Tests unitaires pour la logique métier&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Tests d&amp;amp;#8217;intégration pour les adapters&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Tests de bout en bout pour les CLI&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_sécurité&amp;quot;&amp;gt;11.4. Sécurité&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Scan automatique des dépendances (Safety)&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Analyse statique du code (Bandit)&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Secrets jamais dans le code&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Utilisation de tokens PyPI spécifiques&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_monitoring_et_observabilité&amp;quot;&amp;gt;12. Monitoring et Observabilité&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_métriques_de_pipeline&amp;quot;&amp;gt;12.1. Métriques de Pipeline&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;# .github/workflows/metrics.yml
+name: Pipeline Metrics
+
+on:
+  workflow_run:
+    workflows: [&amp;quot;CI&amp;quot;, &amp;quot;Release&amp;quot;]
+    types: [completed]
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Collect metrics
+      run: |
+        echo &amp;quot;Pipeline: ${{ github.event.workflow_run.name }}&amp;quot;
+        echo &amp;quot;Status: ${{ github.event.workflow_run.conclusion }}&amp;quot;
+        echo &amp;quot;Duration: ${{ github.event.workflow_run.updated_at - github.event.workflow_run.created_at }}&amp;quot;
+        # Envoyer vers système de monitoring&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_notifications&amp;quot;&amp;gt;12.2. Notifications&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;# Ajout dans les workflows pour notifications
+- name: Notify on failure
+  if: failure()
+  uses: 8398a7/action-slack@v3
+  with:
+    status: failure
+    text: &amp;quot;❌ Pipeline failed for ${{ github.repository }}&amp;quot;
+  env:
+    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_conclusion&amp;quot;&amp;gt;13. Conclusion&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Ce pipeline CI/CD complet pour Python offre :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Automatisation complète&amp;lt;/strong&amp;gt; : de la validation du code à la publication&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Sécurité&amp;lt;/strong&amp;gt; : scans automatiques et gestion sécurisée des secrets&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Qualité&amp;lt;/strong&amp;gt; : tests multi-versions, linting et couverture de code&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Fiabilité&amp;lt;/strong&amp;gt; : déploiement progressif via Test PyPI&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Traçabilité&amp;lt;/strong&amp;gt; : artifacts, rapports et releases GitHub&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;L&amp;amp;#8217;adoption de ces pratiques garantit un processus de livraison robuste et professionnel pour vos applications Python CLI, facilitant la maintenance et l&amp;amp;#8217;évolution de vos projets sur le long terme.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_ressources_complémentaires&amp;quot;&amp;gt;14. Ressources Complémentaires&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://packaging.python.org/&amp;quot;&amp;gt;Python Packaging User Guide&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://docs.github.com/en/actions&amp;quot;&amp;gt;GitHub Actions Documentation&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://pypi.org/help/&amp;quot;&amp;gt;PyPI Help Documentation&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://semver.org/&amp;quot;&amp;gt;Semantic Versioning Specification&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://keepachangelog.com/&amp;quot;&amp;gt;Keep a Changelog&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;</description>
+        </item><item>
+            <title>Partie 1 : Mettre en place un pipeline CI/CD simple pour Python et PyPI</title>
+            <link >https://pages-content.github.io//blog/2025/0085_pypi_cicd_part_1_post.html</link>
+            <pubDate>Thu, 17 Jul 2025 00:00:00 +0000</pubDate>
+            <guid isPermaLink="false">blog/2025/0085_pypi_cicd_part_1_post.html</guid>
+            <description>&amp;lt;div id=&amp;quot;toc&amp;quot; class=&amp;quot;toc&amp;quot;&amp;gt;
+&amp;lt;div id=&amp;quot;toctitle&amp;quot;&amp;gt;Sommaire&amp;lt;/div&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel1&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_introduction&amp;quot;&amp;gt;1. Introduction&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_architecture_du_pipeline&amp;quot;&amp;gt;2. Architecture du Pipeline&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_configuration_du_pipeline_dintégration_continue_ci&amp;quot;&amp;gt;3. Configuration du Pipeline d&amp;amp;#8217;Intégration Continue (CI)&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_structure_du_workflow_ci&amp;quot;&amp;gt;3.1. Structure du Workflow CI&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_analyse_des_étapes_ci&amp;quot;&amp;gt;3.2. Analyse des Étapes CI&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel3&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_1_déclencheurs_on&amp;quot;&amp;gt;3.2.1. 1. Déclencheurs (&amp;lt;code&amp;gt;on&amp;lt;/code&amp;gt;)&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_2_environnement_dexécution&amp;quot;&amp;gt;3.2.2. 2. Environnement d&amp;amp;#8217;Exécution&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_3_checkout_du_code&amp;quot;&amp;gt;3.2.3. 3. Checkout du Code&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_4_configuration_python&amp;quot;&amp;gt;3.2.4. 4. Configuration Python&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_5_installation_des_dépendances&amp;quot;&amp;gt;3.2.5. 5. Installation des Dépendances&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_6_linting_avec_ruff&amp;quot;&amp;gt;3.2.6. 6. Linting avec Ruff&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_7_exécution_des_tests&amp;quot;&amp;gt;3.2.7. 7. Exécution des Tests&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_configuration_du_pipeline_de_déploiement_cd&amp;quot;&amp;gt;4. Configuration du Pipeline de Déploiement (CD)&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_structure_du_workflow_cd&amp;quot;&amp;gt;4.1. Structure du Workflow CD&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_analyse_des_étapes_cd&amp;quot;&amp;gt;4.2. Analyse des Étapes CD&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel3&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_1_déclencheur_release&amp;quot;&amp;gt;4.2.1. 1. Déclencheur Release&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_2_installation_des_outils_de_build&amp;quot;&amp;gt;4.2.2. 2. Installation des Outils de Build&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_3_configuration_de_lauthentification&amp;quot;&amp;gt;4.2.3. 3. Configuration de l&amp;amp;#8217;Authentification&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_4_build_et_publication&amp;quot;&amp;gt;4.2.4. 4. Build et Publication&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_configuration_du_package_python&amp;quot;&amp;gt;5. Configuration du Package Python&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_structure_du_setup_py&amp;quot;&amp;gt;5.1. Structure du setup.py&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_points_clés_du_setup_py&amp;quot;&amp;gt;5.2. Points Clés du setup.py&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_sécurisation_avec_les_github_secrets&amp;quot;&amp;gt;6. Sécurisation avec les GitHub Secrets&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_configuration_du_token_pypi&amp;quot;&amp;gt;6.1. Configuration du Token PyPI&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_workflow_de_déploiement_complet&amp;quot;&amp;gt;7. Workflow de Déploiement Complet&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_séquence_de_déploiement&amp;quot;&amp;gt;7.1. Séquence de Déploiement&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_états_du_pipeline&amp;quot;&amp;gt;7.2. États du Pipeline&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_bonnes_pratiques_et_optimisations&amp;quot;&amp;gt;8. Bonnes Pratiques et Optimisations&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_1_gestion_des_versions&amp;quot;&amp;gt;8.1. 1. Gestion des Versions&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_2_tests_de_matrice&amp;quot;&amp;gt;8.2. 2. Tests de Matrice&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_3_cache_des_dépendances&amp;quot;&amp;gt;8.3. 3. Cache des Dépendances&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_4_environnements_de_déploiement&amp;quot;&amp;gt;8.4. 4. Environnements de Déploiement&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_cas_dusage_et_architecture&amp;quot;&amp;gt;9. Cas d&amp;amp;#8217;Usage et Architecture&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_diagramme_de_cas_dusage&amp;quot;&amp;gt;9.1. Diagramme de Cas d&amp;amp;#8217;Usage&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_architecture_du_déploiement&amp;quot;&amp;gt;9.2. Architecture du Déploiement&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_surveillance_et_debugging&amp;quot;&amp;gt;10. Surveillance et Debugging&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_logs_et_monitoring&amp;quot;&amp;gt;10.1. Logs et Monitoring&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_notifications&amp;quot;&amp;gt;10.2. Notifications&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_conclusion&amp;quot;&amp;gt;11. Conclusion&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_ressources_complémentaires&amp;quot;&amp;gt;12. Ressources Complémentaires&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;preamble&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;title&amp;quot;&amp;gt;Objectif :&amp;lt;/div&amp;gt;
+&amp;lt;p&amp;gt;Accompagner le lecteur dans la mise en place d’un pipeline CI/CD minimaliste mais fonctionnel pour une application Python, avec un déploiement automatique sur PyPI.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_introduction&amp;quot;&amp;gt;1. Introduction&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;L&amp;amp;#8217;automatisation des processus de développement est devenue incontournable dans les projets modernes. Un pipeline CI/CD bien conçu permet non seulement de détecter les régressions tôt dans le cycle de développement, mais aussi d&amp;amp;#8217;automatiser entièrement le processus de déploiement.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Dans cet article, nous allons explorer comment mettre en place un pipeline complet avec GitHub Actions pour une application Python, de l&amp;amp;#8217;intégration continue (CI) au déploiement continu (CD) sur PyPI.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_architecture_du_pipeline&amp;quot;&amp;gt;2. Architecture du Pipeline&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Notre pipeline se compose de deux workflows distincts :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;olist arabic&amp;quot;&amp;gt;
+&amp;lt;ol class=&amp;quot;arabic&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;CI Pipeline&amp;lt;/strong&amp;gt; : Exécuté sur chaque push et pull request&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;CD Pipeline&amp;lt;/strong&amp;gt; : Déclenché uniquement lors des releases GitHub&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/ci-cd-overview.svg&amp;quot; alt=&amp;quot;ci cd overview&amp;quot; width=&amp;quot;420&amp;quot; height=&amp;quot;845&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_configuration_du_pipeline_dintégration_continue_ci&amp;quot;&amp;gt;3. Configuration du Pipeline d&amp;amp;#8217;Intégration Continue (CI)&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_structure_du_workflow_ci&amp;quot;&amp;gt;3.1. Structure du Workflow CI&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le workflow CI est conçu pour valider chaque contribution au code. Voici sa configuration complète :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: &amp;#39;3.x&amp;#39;
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install ruff pytest pytest-mock
+
+    - name: Run Linting (Ruff)
+      run: ruff check .
+
+    - name: Run Tests (Pytest)
+      run: pytest&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_analyse_des_étapes_ci&amp;quot;&amp;gt;3.2. Analyse des Étapes CI&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_1_déclencheurs_on&amp;quot;&amp;gt;3.2.1. 1. Déclencheurs (&amp;lt;code&amp;gt;on&amp;lt;/code&amp;gt;)&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le pipeline se déclenche sur :
+- Chaque push sur la branche &amp;lt;code&amp;gt;main&amp;lt;/code&amp;gt;
+- Chaque pull request vers &amp;lt;code&amp;gt;main&amp;lt;/code&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cette approche garantit que le code principal reste stable et que toute contribution est validée avant intégration.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_2_environnement_dexécution&amp;quot;&amp;gt;3.2.2. 2. Environnement d&amp;amp;#8217;Exécution&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;runs-on: ubuntu-latest&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Ubuntu Latest offre un bon compromis entre performance, coût et compatibilité pour la plupart des projets Python.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_3_checkout_du_code&amp;quot;&amp;gt;3.2.3. 3. Checkout du Code&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Checkout code
+  uses: actions/checkout@v4&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;L&amp;amp;#8217;action &amp;lt;code&amp;gt;checkout@v4&amp;lt;/code&amp;gt; récupère le code source du repository. La version v4 apporte des améliorations de performance et de sécurité.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_4_configuration_python&amp;quot;&amp;gt;3.2.4. 4. Configuration Python&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Set up Python
+  uses: actions/setup-python@v5
+  with:
+    python-version: &amp;#39;3.x&amp;#39;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;L&amp;amp;#8217;utilisation de &amp;lt;code&amp;gt;&amp;#39;3.x&amp;#39;&amp;lt;/code&amp;gt; permet d&amp;amp;#8217;automatiquement utiliser la dernière version stable de Python 3, simplifiant la maintenance.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_5_installation_des_dépendances&amp;quot;&amp;gt;3.2.5. 5. Installation des Dépendances&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Install dependencies
+  run: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+    pip install ruff pytest pytest-mock&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cette étape :
+- Met à jour pip vers la dernière version
+- Installe les dépendances du projet
+- Ajoute les outils de développement (linting et tests)&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_6_linting_avec_ruff&amp;quot;&amp;gt;3.2.6. 6. Linting avec Ruff&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Run Linting (Ruff)
+  run: ruff check .&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Ruff&amp;lt;/strong&amp;gt; est un linter Python ultra-rapide écrit en Rust. Il combine les fonctionnalités de plusieurs outils (Flake8, Black, isort) en un seul outil performant.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_7_exécution_des_tests&amp;quot;&amp;gt;3.2.7. 7. Exécution des Tests&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Run Tests (Pytest)
+  run: pytest&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Pytest exécute l&amp;amp;#8217;ensemble de la suite de tests, garantissant que les modifications n&amp;amp;#8217;introduisent pas de régressions.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_configuration_du_pipeline_de_déploiement_cd&amp;quot;&amp;gt;4. Configuration du Pipeline de Déploiement (CD)&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_structure_du_workflow_cd&amp;quot;&amp;gt;4.1. Structure du Workflow CD&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le workflow CD se déclenche uniquement lors des releases GitHub et automatise la publication sur PyPI :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;name: Publish to PyPI
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: &amp;#39;3.x&amp;#39;
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
+
+    - name: Build and publish
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        python setup.py sdist bdist_wheel
+        twine upload dist/*&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_analyse_des_étapes_cd&amp;quot;&amp;gt;4.2. Analyse des Étapes CD&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_1_déclencheur_release&amp;quot;&amp;gt;4.2.1. 1. Déclencheur Release&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;on:
+  release:
+    types:
+      - published&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le pipeline CD ne se déclenche que lors de la publication d&amp;amp;#8217;une release GitHub. Cette approche assure un contrôle précis des déploiements.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_2_installation_des_outils_de_build&amp;quot;&amp;gt;4.2.2. 2. Installation des Outils de Build&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;pip install setuptools wheel twine&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;setuptools&amp;lt;/strong&amp;gt; : Outils de packaging Python&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;wheel&amp;lt;/strong&amp;gt; : Format de distribution Python moderne&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;twine&amp;lt;/strong&amp;gt; : Outil sécurisé pour uploader vers PyPI&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_3_configuration_de_lauthentification&amp;quot;&amp;gt;4.2.3. 3. Configuration de l&amp;amp;#8217;Authentification&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;env:
+  TWINE_USERNAME: __token__
+  TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;L&amp;amp;#8217;authentification utilise un token API PyPI stocké comme secret GitHub, plus sécurisé que les identifiants classiques.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_4_build_et_publication&amp;quot;&amp;gt;4.2.4. 4. Build et Publication&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;run: |
+  python setup.py sdist bdist_wheel
+  twine upload dist/*&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;code&amp;gt;sdist&amp;lt;/code&amp;gt; : Crée une distribution source&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;code&amp;gt;bdist_wheel&amp;lt;/code&amp;gt; : Crée une wheel (distribution binaire)&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;code&amp;gt;twine upload&amp;lt;/code&amp;gt; : Publie les distributions sur PyPI&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_configuration_du_package_python&amp;quot;&amp;gt;5. Configuration du Package Python&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_structure_du_setup_py&amp;quot;&amp;gt;5.1. Structure du setup.py&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Pour que le pipeline fonctionne, votre projet doit inclure un fichier &amp;lt;code&amp;gt;setup.py&amp;lt;/code&amp;gt; :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;python&amp;quot;&amp;gt;from setuptools import setup, find_packages
+
+with open(&amp;quot;README.adoc&amp;quot;, &amp;quot;r&amp;quot;, encoding=&amp;quot;utf-8&amp;quot;) as fh:
+    long_description = fh.read()
+
+setup(
+    name=&amp;quot;playlist-downloader&amp;quot;,
+    version=&amp;quot;1.0.0&amp;quot;,
+    author=&amp;quot;Votre Nom&amp;quot;,
+    author_email=&amp;quot;votre.email@example.com&amp;quot;,
+    description=&amp;quot;CLI tool for managing YouTube playlists&amp;quot;,
+    long_description=long_description,
+    long_description_content_type=&amp;quot;text/plain&amp;quot;,
+    url=&amp;quot;https://github.com/cheroliv/playlist-downloader&amp;quot;,
+    packages=find_packages(),
+    classifiers=[
+        &amp;quot;Development Status :: 4 - Beta&amp;quot;,
+        &amp;quot;Intended Audience :: Developers&amp;quot;,
+        &amp;quot;License :: OSI Approved :: MIT License&amp;quot;,
+        &amp;quot;Operating System :: OS Independent&amp;quot;,
+        &amp;quot;Programming Language :: Python :: 3&amp;quot;,
+        &amp;quot;Programming Language :: Python :: 3.8&amp;quot;,
+        &amp;quot;Programming Language :: Python :: 3.9&amp;quot;,
+        &amp;quot;Programming Language :: Python :: 3.10&amp;quot;,
+        &amp;quot;Programming Language :: Python :: 3.11&amp;quot;,
+    ],
+    python_requires=&amp;quot;&amp;amp;gt;=3.8&amp;quot;,
+    install_requires=[
+        &amp;quot;typer&amp;amp;gt;=0.9.0&amp;quot;,
+        &amp;quot;yt-dlp&amp;amp;gt;=2023.1.6&amp;quot;,
+        &amp;quot;google-api-python-client&amp;amp;gt;=2.70.0&amp;quot;,
+        &amp;quot;google-auth-oauthlib&amp;amp;gt;=0.7.1&amp;quot;,
+        &amp;quot;pymonad&amp;amp;gt;=2.4.0&amp;quot;,
+        &amp;quot;pyyaml&amp;amp;gt;=6.0&amp;quot;,
+    ],
+    entry_points={
+        &amp;quot;console_scripts&amp;quot;: [
+            &amp;quot;playlist-downloader=cli:app&amp;quot;,
+        ],
+    },
+)&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_points_clés_du_setup_py&amp;quot;&amp;gt;5.2. Points Clés du setup.py&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;olist arabic&amp;quot;&amp;gt;
+&amp;lt;ol class=&amp;quot;arabic&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Métadonnées&amp;lt;/strong&amp;gt; : Nom, version, auteur, description&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Dépendances&amp;lt;/strong&amp;gt; : Liste des packages requis&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Entry Points&amp;lt;/strong&amp;gt; : Commandes CLI exposées&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Classifiers&amp;lt;/strong&amp;gt; : Métadonnées pour PyPI&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_sécurisation_avec_les_github_secrets&amp;quot;&amp;gt;6. Sécurisation avec les GitHub Secrets&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_configuration_du_token_pypi&amp;quot;&amp;gt;6.1. Configuration du Token PyPI&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;olist arabic&amp;quot;&amp;gt;
+&amp;lt;ol class=&amp;quot;arabic&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Créer un token API sur PyPI&amp;lt;/strong&amp;gt; :&amp;lt;/p&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Connectez-vous à PyPI&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Allez dans Account Settings &amp;amp;gt; API tokens&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Créez un nouveau token avec les permissions appropriées&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Ajouter le secret dans GitHub&amp;lt;/strong&amp;gt; :&amp;lt;/p&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Repository Settings &amp;amp;gt; Secrets and variables &amp;amp;gt; Actions&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Créez un nouveau secret nommé &amp;lt;code&amp;gt;PYPI_API_TOKEN&amp;lt;/code&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;Collez votre token PyPI&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/secrets-flow.svg&amp;quot; alt=&amp;quot;secrets flow&amp;quot; width=&amp;quot;848&amp;quot; height=&amp;quot;429&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_workflow_de_déploiement_complet&amp;quot;&amp;gt;7. Workflow de Déploiement Complet&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_séquence_de_déploiement&amp;quot;&amp;gt;7.1. Séquence de Déploiement&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/deployment-sequence.svg&amp;quot; alt=&amp;quot;deployment sequence&amp;quot; width=&amp;quot;905&amp;quot; height=&amp;quot;690&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_états_du_pipeline&amp;quot;&amp;gt;7.2. États du Pipeline&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/pipeline-states.svg&amp;quot; alt=&amp;quot;pipeline states&amp;quot; width=&amp;quot;998&amp;quot; height=&amp;quot;413&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_bonnes_pratiques_et_optimisations&amp;quot;&amp;gt;8. Bonnes Pratiques et Optimisations&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_1_gestion_des_versions&amp;quot;&amp;gt;8.1. 1. Gestion des Versions&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Utilisez des tags Git sémantiques :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;bash&amp;quot;&amp;gt;git tag -a v1.2.3 -m &amp;quot;Release version 1.2.3&amp;quot;
+git push origin v1.2.3&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_2_tests_de_matrice&amp;quot;&amp;gt;8.2. 2. Tests de Matrice&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Pour tester sur plusieurs versions Python :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;strategy:
+  matrix:
+    python-version: [3.8, 3.9, &amp;quot;3.10&amp;quot;, &amp;quot;3.11&amp;quot;]&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_3_cache_des_dépendances&amp;quot;&amp;gt;8.3. 3. Cache des Dépendances&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Accélérez les builds avec le cache :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Cache pip dependencies
+  uses: actions/cache@v3
+  with:
+    path: ~/.cache/pip
+    key: ${{ runner.os }}-pip-${{ hashFiles(&amp;#39;**/requirements.txt&amp;#39;) }}&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_4_environnements_de_déploiement&amp;quot;&amp;gt;8.4. 4. Environnements de Déploiement&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Utilisez les environnements GitHub pour des déploiements contrôlés :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;jobs:
+  deploy:
+    environment: production
+    runs-on: ubuntu-latest&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_cas_dusage_et_architecture&amp;quot;&amp;gt;9. Cas d&amp;amp;#8217;Usage et Architecture&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_diagramme_de_cas_dusage&amp;quot;&amp;gt;9.1. Diagramme de Cas d&amp;amp;#8217;Usage&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/use-cases.svg&amp;quot; alt=&amp;quot;use cases&amp;quot; width=&amp;quot;469&amp;quot; height=&amp;quot;456&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_architecture_du_déploiement&amp;quot;&amp;gt;9.2. Architecture du Déploiement&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;images/deployment-architecture.svg&amp;quot; alt=&amp;quot;deployment architecture&amp;quot; width=&amp;quot;683&amp;quot; height=&amp;quot;912&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_surveillance_et_debugging&amp;quot;&amp;gt;10. Surveillance et Debugging&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_logs_et_monitoring&amp;quot;&amp;gt;10.1. Logs et Monitoring&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;GitHub Actions fournit des logs détaillés pour chaque étape. Pour débugger :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;olist arabic&amp;quot;&amp;gt;
+&amp;lt;ol class=&amp;quot;arabic&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Examinez les logs&amp;lt;/strong&amp;gt; de chaque step&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Activez le debug&amp;lt;/strong&amp;gt; avec &amp;lt;code&amp;gt;ACTIONS_STEP_DEBUG&amp;lt;/code&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Utilisez des artifacts&amp;lt;/strong&amp;gt; pour sauvegarder les fichiers de build&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Upload build artifacts
+  uses: actions/upload-artifact@v3
+  if: failure()
+  with:
+    name: build-logs
+    path: build/&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_notifications&amp;quot;&amp;gt;10.2. Notifications&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Ajoutez des notifications Slack ou email :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;pygments highlight&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;yaml&amp;quot;&amp;gt;- name: Notify on failure
+  if: failure()
+  uses: 8398a7/action-slack@v3
+  with:
+    status: ${{ job.status }}
+    webhook_url: ${{ secrets.SLACK_WEBHOOK }}&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_conclusion&amp;quot;&amp;gt;11. Conclusion&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;La mise en place d&amp;amp;#8217;un pipeline CI/CD robuste avec GitHub Actions transforme radicalement l&amp;amp;#8217;expérience de développement. En automatisant le linting, les tests et le déploiement, vous :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Réduisez les erreurs&amp;lt;/strong&amp;gt; en production&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Accélérez les cycles&amp;lt;/strong&amp;gt; de développement&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Améliorez la confiance&amp;lt;/strong&amp;gt; dans vos releases&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Facilitez la collaboration&amp;lt;/strong&amp;gt; en équipe&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Ce pipeline peut être adapté à différents types de projets Python en ajustant les outils de linting, les frameworks de test, ou les destinations de déploiement.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;L&amp;amp;#8217;investissement initial dans la configuration de ces workflows est rapidement rentabilisé par le gain de temps et la réduction des erreurs manuelles lors des déploiements.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_ressources_complémentaires&amp;quot;&amp;gt;12. Ressources Complémentaires&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://docs.github.com/en/actions&amp;quot;&amp;gt;Documentation GitHub Actions&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://packaging.python.org/&amp;quot;&amp;gt;Python Packaging Guide&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://docs.pytest.org/&amp;quot;&amp;gt;Documentation Pytest&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://docs.astral.sh/ruff/&amp;quot;&amp;gt;Documentation Ruff&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://twine.readthedocs.io/&amp;quot;&amp;gt;Documentation Twine&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;✅ Pipeline fonctionnel atteint !
+Vous avez désormais un pipeline CI/CD simple qui vous permet d’automatiser vos tests et de publier votre package Python sur PyPI directement depuis GitHub Actions.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cependant, ce pipeline reste volontairement minimaliste. Il ne couvre pas encore certains aspects indispensables dans un contexte professionnel :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;literalblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre&amp;gt;Tests multi-versions de Python,&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;literalblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre&amp;gt;Analyse de sécurité automatique,&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;literalblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre&amp;gt;Déploiement progressif via Test PyPI,&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;literalblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre&amp;gt;Surveillance et métriques du pipeline,&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;literalblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre&amp;gt;Automatisation du versioning et intégration des bonnes pratiques modernes (pyproject.toml).&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Dans la prochaine partie, nous allons passer à l’étape supérieure. Vous apprendrez à transformer ce pipeline de base en une véritable chaîne de déploiement industrielle, robuste et sécurisée, prête pour des projets Python de production.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;</description>
+        </item><item>
+            <title>Développement d&#39;un Bot Discord Musical : Architecture Fonctionnelle et Log Driven Development</title>
+            <link >https://pages-content.github.io//blog/2025/0084_disco_bot_discord_python_post.html</link>
+            <pubDate>Wed, 16 Jul 2025 00:00:00 +0000</pubDate>
+            <guid isPermaLink="false">blog/2025/0084_disco_bot_discord_python_post.html</guid>
+            <description>&amp;lt;div id=&amp;quot;toc&amp;quot; class=&amp;quot;toc&amp;quot;&amp;gt;
+&amp;lt;div id=&amp;quot;toctitle&amp;quot;&amp;gt;Table of Contents&amp;lt;/div&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel1&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_introduction&amp;quot;&amp;gt;1. Introduction&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_contexte_et_défis_actuels&amp;quot;&amp;gt;2. Contexte et Défis Actuels&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_évolution_des_apis_musicales&amp;quot;&amp;gt;2.1. Évolution des APIs Musicales&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_approche_log_driven_development&amp;quot;&amp;gt;2.2. Approche Log Driven Development&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_architecture_conceptuelle&amp;quot;&amp;gt;3. Architecture Conceptuelle&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_stack_technique_et_paradigme_fonctionnel&amp;quot;&amp;gt;4. Stack Technique et Paradigme Fonctionnel&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_choix_technologiques&amp;quot;&amp;gt;4.1. Choix Technologiques&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_principes_fonctionnels_appliqués&amp;quot;&amp;gt;4.2. Principes Fonctionnels Appliqués&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_méthodologie_agile_et_backlog&amp;quot;&amp;gt;5. Méthodologie Agile et Backlog&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_epic_principales&amp;quot;&amp;gt;5.1. Epic Principales&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel3&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_epic_1_infrastructure_bot_discord&amp;quot;&amp;gt;5.1.1. Epic 1 : Infrastructure Bot Discord&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_epic_2_intégration_spotify&amp;quot;&amp;gt;5.1.2. Epic 2 : Intégration Spotify&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_epic_3_intégration_youtube&amp;quot;&amp;gt;5.1.3. Epic 3 : Intégration YouTube&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_epic_4_fonctionnalités_musicales&amp;quot;&amp;gt;5.1.4. Epic 4 : Fonctionnalités Musicales&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_user_stories_détaillées&amp;quot;&amp;gt;5.2. User Stories Détaillées&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel3&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_us1_1_initialisation_du_bot&amp;quot;&amp;gt;5.2.1. US1.1 : Initialisation du Bot&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_us2_1_recherche_spotify_intelligente&amp;quot;&amp;gt;5.2.2. US2.1 : Recherche Spotify Intelligente&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_us3_1_extraction_youtube_resiliente&amp;quot;&amp;gt;5.2.3. US3.1 : Extraction YouTube Resiliente&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_approche_log_driven_development_2&amp;quot;&amp;gt;6. Approche Log Driven Development&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_stratégie_de_logging&amp;quot;&amp;gt;6.1. Stratégie de Logging&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_structure_des_logs&amp;quot;&amp;gt;6.2. Structure des Logs&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_exemple_de_log_design&amp;quot;&amp;gt;6.3. Exemple de Log Design&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_architecture_de_validation_avec_pydantic&amp;quot;&amp;gt;7. Architecture de Validation avec Pydantic&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_modèles_de_données&amp;quot;&amp;gt;7.1. Modèles de Données&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_gestion_des_erreurs_fonctionnelle&amp;quot;&amp;gt;8. Gestion des Erreurs Fonctionnelle&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_monades_et_error_handling&amp;quot;&amp;gt;8.1. Monades et Error Handling&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_stratégie_de_contournement_des_restrictions&amp;quot;&amp;gt;9. Stratégie de Contournement des Restrictions&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_approche_multi_source&amp;quot;&amp;gt;9.1. Approche Multi-Source&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_plan_de_développement_itératif&amp;quot;&amp;gt;10. Plan de Développement Itératif&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_sprint_planning&amp;quot;&amp;gt;10.1. Sprint Planning&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_métriques_de_qualité&amp;quot;&amp;gt;10.2. Métriques de Qualité&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_déploiement_et_monitoring&amp;quot;&amp;gt;11. Déploiement et Monitoring&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_architecture_de_production&amp;quot;&amp;gt;11.1. Architecture de Production&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_monitoring_proactif&amp;quot;&amp;gt;11.2. Monitoring Proactif&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_conclusion_et_perspectives&amp;quot;&amp;gt;12. Conclusion et Perspectives&amp;lt;/a&amp;gt;
+&amp;lt;ul class=&amp;quot;sectlevel2&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#_prochaines_étapes&amp;quot;&amp;gt;12.1. Prochaines Étapes&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_introduction&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_introduction&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;1. Introduction&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le développement d&amp;amp;#8217;un bot Discord intégrant les APIs Spotify et YouTube représente un défi technique moderne, notamment face aux récentes restrictions et évolutions des plateformes. Cet article présente une approche méthodologique basée sur le &amp;lt;strong&amp;gt;Log Driven Development&amp;lt;/strong&amp;gt; (LDD), une extension du Test Driven Development, appliquée dans un paradigme fonctionnel avec Python.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Notre objectif : créer un bot robuste, maintenable et évolutif, capable de naviguer les contraintes actuelles des APIs musicales tout en offrant une expérience utilisateur fluide sur Discord.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_contexte_et_défis_actuels&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_contexte_et_défis_actuels&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;2. Contexte et Défis Actuels&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_évolution_des_apis_musicales&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_évolution_des_apis_musicales&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;2.1. Évolution des APIs Musicales&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Les plateformes musicales ont considérablement durci leurs politiques d&amp;amp;#8217;accès :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Spotify&amp;lt;/strong&amp;gt; : Restrictions sur l&amp;amp;#8217;accès aux métadonnées, limitation des quotas&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;YouTube&amp;lt;/strong&amp;gt; : Politique anti-bot renforcée, complexification de l&amp;amp;#8217;authentification&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Discord&amp;lt;/strong&amp;gt; : Nouvelles exigences de sécurité et de performance&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_approche_log_driven_development&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_approche_log_driven_development&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;2.2. Approche Log Driven Development&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le LDD étend le TDD en plaçant les logs au cœur du développement :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;olist arabic&amp;quot;&amp;gt;
+&amp;lt;ol class=&amp;quot;arabic&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Définition des logs&amp;lt;/strong&amp;gt; avant l&amp;amp;#8217;implémentation&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Validation par observation&amp;lt;/strong&amp;gt; des comportements attendus&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Traçabilité complète&amp;lt;/strong&amp;gt; des flux de données&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Debugging proactif&amp;lt;/strong&amp;gt; par anticipation des erreurs&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_architecture_conceptuelle&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_architecture_conceptuelle&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;3. Architecture Conceptuelle&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;diag-plantuml-md5-086b9caf633e5b3a704d7962a864373a.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;777&amp;quot; height=&amp;quot;618&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_stack_technique_et_paradigme_fonctionnel&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_stack_technique_et_paradigme_fonctionnel&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;4. Stack Technique et Paradigme Fonctionnel&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_choix_technologiques&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_choix_technologiques&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;4.1. Choix Technologiques&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Notre stack s&amp;amp;#8217;articule autour de la programmation fonctionnelle :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;dlist&amp;quot;&amp;gt;
+&amp;lt;dl&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;PyMonade&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Gestion des effets de bord et composition de fonctions&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;Pydantic&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Validation de données type-safe et sérialisation&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;Asyncio&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Programmation asynchrone pour les APIs&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;Structlog&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Logging structuré pour le LDD&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;/dl&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_principes_fonctionnels_appliqués&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_principes_fonctionnels_appliqués&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;4.2. Principes Fonctionnels Appliqués&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;diag-plantuml-md5-430159f75aabab4ced1766bbd98cc2d0.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;701&amp;quot; height=&amp;quot;554&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_méthodologie_agile_et_backlog&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_méthodologie_agile_et_backlog&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5. Méthodologie Agile et Backlog&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_epic_principales&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_epic_principales&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.1. Epic Principales&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Notre développement s&amp;amp;#8217;organise autour de 4 épics majeures :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_epic_1_infrastructure_bot_discord&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_epic_1_infrastructure_bot_discord&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.1.1. Epic 1 : Infrastructure Bot Discord&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Valeur métier&amp;lt;/strong&amp;gt; : Base solide et extensible&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Critères d&amp;amp;#8217;acceptation&amp;lt;/strong&amp;gt; :
+- Connexion Discord stable avec gestion de reconnexion
+- Système de commandes modulaire
+- Logging structuré intégré
+- Gestion d&amp;amp;#8217;erreurs centralisée&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_epic_2_intégration_spotify&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_epic_2_intégration_spotify&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.1.2. Epic 2 : Intégration Spotify&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Valeur métier&amp;lt;/strong&amp;gt; : Accès aux métadonnées musicales&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Critères d&amp;amp;#8217;acceptation&amp;lt;/strong&amp;gt; :
+- Authentification OAuth2 sécurisée
+- Recherche de tracks avec cache intelligent
+- Gestion des quotas API
+- Fallback sur erreurs réseau&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_epic_3_intégration_youtube&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_epic_3_intégration_youtube&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.1.3. Epic 3 : Intégration YouTube&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Valeur métier&amp;lt;/strong&amp;gt; : Accès au contenu audio&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Critères d&amp;amp;#8217;acceptation&amp;lt;/strong&amp;gt; :
+- Contournement légal des restrictions
+- Extraction audio optimisée
+- Gestion des vidéos privées/supprimées
+- Respect des ToS YouTube&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_epic_4_fonctionnalités_musicales&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_epic_4_fonctionnalités_musicales&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.1.4. Epic 4 : Fonctionnalités Musicales&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Valeur métier&amp;lt;/strong&amp;gt; : Expérience utilisateur complète&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Critères d&amp;amp;#8217;acceptation&amp;lt;/strong&amp;gt; :
+- Lecture audio haute qualité
+- Queue de lecture intelligente
+- Commandes vocales Discord
+- Synchronisation cross-platform&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_user_stories_détaillées&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_user_stories_détaillées&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.2. User Stories Détaillées&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_us1_1_initialisation_du_bot&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_us1_1_initialisation_du_bot&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.2.1. US1.1 : Initialisation du Bot&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;En tant que&amp;lt;/strong&amp;gt; développeur
+&amp;lt;strong&amp;gt;Je veux&amp;lt;/strong&amp;gt; un bot Discord qui se connecte de manière fiable
+&amp;lt;strong&amp;gt;Afin de&amp;lt;/strong&amp;gt; garantir la disponibilité du service&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;DoD (Definition of Done)&amp;lt;/strong&amp;gt; :
+- [ ] Bot se connecte automatiquement au démarrage
+- [ ] Logs structurés documentent chaque étape
+- [ ] Reconnexion automatique en cas de déconnexion
+- [ ] Tests d&amp;amp;#8217;intégration passent&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_us2_1_recherche_spotify_intelligente&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_us2_1_recherche_spotify_intelligente&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.2.2. US2.1 : Recherche Spotify Intelligente&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;En tant qu&amp;#39;&amp;lt;/strong&amp;gt; utilisateur Discord
+&amp;lt;strong&amp;gt;Je veux&amp;lt;/strong&amp;gt; rechercher des morceaux via Spotify
+&amp;lt;strong&amp;gt;Afin de&amp;lt;/strong&amp;gt; découvrir et partager de la musique&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;DoD&amp;lt;/strong&amp;gt; :
+- [ ] Commande &amp;lt;code&amp;gt;/search&amp;lt;/code&amp;gt; fonctionnelle
+- [ ] Résultats pertinents avec métadonnées
+- [ ] Cache local pour optimiser les requêtes
+- [ ] Gestion gracieuse des erreurs API&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect3&amp;quot;&amp;gt;
+&amp;lt;h4 id=&amp;quot;_us3_1_extraction_youtube_resiliente&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_us3_1_extraction_youtube_resiliente&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;5.2.3. US3.1 : Extraction YouTube Resiliente&amp;lt;/h4&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;En tant que&amp;lt;/strong&amp;gt; système
+&amp;lt;strong&amp;gt;Je veux&amp;lt;/strong&amp;gt; extraire l&amp;amp;#8217;audio YouTube de manière fiable
+&amp;lt;strong&amp;gt;Afin de&amp;lt;/strong&amp;gt; maintenir la continuité du service&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;DoD&amp;lt;/strong&amp;gt; :
+- [ ] Extraction sans violation des ToS
+- [ ] Qualité audio optimale
+- [ ] Gestion des restrictions géographiques
+- [ ] Logs détaillés des opérations&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_approche_log_driven_development_2&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_approche_log_driven_development_2&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;6. Approche Log Driven Development&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_stratégie_de_logging&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_stratégie_de_logging&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;6.1. Stratégie de Logging&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;diag-plantuml-md5-79d957417244512294c169ebb2d6b88a.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;687&amp;quot; height=&amp;quot;633&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_structure_des_logs&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_structure_des_logs&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;6.2. Structure des Logs&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Notre approche LDD utilise des logs structurés avec des niveaux sémantiques :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;dlist&amp;quot;&amp;gt;
+&amp;lt;dl&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;TRACE&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Flux de données détaillé&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;DEBUG&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;États internes des fonctions&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;INFO&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Opérations métier réussies&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;WARN&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Situations dégradées mais gérées&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;ERROR&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Erreurs nécessitant intervention&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;CRITICAL&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Pannes système&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;/dl&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_exemple_de_log_design&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_exemple_de_log_design&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;6.3. Exemple de Log Design&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Avant d&amp;amp;#8217;implémenter la fonction de recherche Spotify, nous définissons ses logs :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;highlightjs highlight&amp;quot;&amp;gt;&amp;lt;code class=&amp;quot;language-none hljs&amp;quot;&amp;gt;INFO: spotify.search.start query=&amp;quot;bohemian rhapsody&amp;quot; user_id=123456
+DEBUG: spotify.search.validation query_length=16 safe_chars=true
+DEBUG: spotify.search.api_call endpoint=&amp;quot;/search&amp;quot; params={...}
+INFO: spotify.search.success results_count=15 duration_ms=340&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_architecture_de_validation_avec_pydantic&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_architecture_de_validation_avec_pydantic&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;7. Architecture de Validation avec Pydantic&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_modèles_de_données&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_modèles_de_données&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;7.1. Modèles de Données&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Notre approche fonctionnelle privilégie la validation en amont :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;diag-plantuml-md5-c6fae117aa98299175aac2f8bb11c734.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;696&amp;quot; height=&amp;quot;339&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_gestion_des_erreurs_fonctionnelle&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_gestion_des_erreurs_fonctionnelle&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;8. Gestion des Erreurs Fonctionnelle&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_monades_et_error_handling&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_monades_et_error_handling&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;8.1. Monades et Error Handling&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;L&amp;amp;#8217;utilisation de PyMonade permet une gestion élégante des erreurs :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;diag-plantuml-md5-d256bdb87b36125ca20f18b0f9756180.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;494&amp;quot; height=&amp;quot;494&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_stratégie_de_contournement_des_restrictions&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_stratégie_de_contournement_des_restrictions&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;9. Stratégie de Contournement des Restrictions&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_approche_multi_source&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_approche_multi_source&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;9.1. Approche Multi-Source&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Face aux restrictions des APIs, nous adoptons une stratégie de diversification :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;diag-plantuml-md5-1631d63ee04755eae439c5d595af9534.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;665&amp;quot; height=&amp;quot;744&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_plan_de_développement_itératif&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_plan_de_développement_itératif&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;10. Plan de Développement Itératif&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_sprint_planning&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_sprint_planning&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;10.1. Sprint Planning&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Notre développement suit un cycle de sprints de 2 semaines :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;dlist&amp;quot;&amp;gt;
+&amp;lt;dl&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;Sprint 1-2&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Infrastructure et Discord Bot Core&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;Sprint 3-4&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Intégration Spotify avec LDD&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;Sprint 5-6&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Intégration YouTube et contournements&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;Sprint 7-8&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Features musicales avancées&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;dt class=&amp;quot;hdlist1&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;Sprint 9-10&amp;lt;/strong&amp;gt; &amp;lt;/dt&amp;gt;
+&amp;lt;dd&amp;gt;
+&amp;lt;p&amp;gt;Optimisation et production&amp;lt;/p&amp;gt;
+&amp;lt;/dd&amp;gt;
+&amp;lt;/dl&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_métriques_de_qualité&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_métriques_de_qualité&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;10.2. Métriques de Qualité&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Chaque sprint est évalué sur :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Couverture de logs&amp;lt;/strong&amp;gt; : &amp;amp;gt;90% des chemins critiques&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Fiabilité API&amp;lt;/strong&amp;gt; : &amp;amp;lt;1% d&amp;amp;#8217;erreurs non gérées&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Performance&amp;lt;/strong&amp;gt; : &amp;amp;lt;500ms temps de réponse moyen&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Maintenabilité&amp;lt;/strong&amp;gt; : Complexité cyclomatique &amp;amp;lt;10&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_déploiement_et_monitoring&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_déploiement_et_monitoring&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;11. Déploiement et Monitoring&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_architecture_de_production&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_architecture_de_production&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;11.1. Architecture de Production&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;diag-plantuml-md5-2049b13cbdd9eed68076ed557f938d6d.png&amp;quot; alt=&amp;quot;Diagram&amp;quot; width=&amp;quot;938&amp;quot; height=&amp;quot;381&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_monitoring_proactif&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_monitoring_proactif&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;11.2. Monitoring Proactif&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le LDD facilite un monitoring intelligent :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Alertes basées sur les patterns de logs&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Détection d&amp;amp;#8217;anomalies comportementales&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Métriques métier en temps réel&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Debugging assisté par corrélation de logs&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect1&amp;quot;&amp;gt;
+&amp;lt;h2 id=&amp;quot;_conclusion_et_perspectives&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_conclusion_et_perspectives&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;12. Conclusion et Perspectives&amp;lt;/h2&amp;gt;
+&amp;lt;div class=&amp;quot;sectionbody&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cette approche méthodologique combine les bénéfices du paradigme fonctionnel avec la robustesse du Log Driven Development. Elle nous permet de :&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;olist arabic&amp;quot;&amp;gt;
+&amp;lt;ol class=&amp;quot;arabic&amp;quot;&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Anticiper les problèmes&amp;lt;/strong&amp;gt; grâce aux logs conçus en amont&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Maintenir la qualité&amp;lt;/strong&amp;gt; via la validation continue&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Adapter rapidement&amp;lt;/strong&amp;gt; aux changements d&amp;amp;#8217;APIs&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Assurer la traçabilité&amp;lt;/strong&amp;gt; complète des opérations&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Le développement itératif et l&amp;amp;#8217;architecture modulaire garantissent une évolutivité face aux contraintes changeantes des plateformes musicales.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;sect2&amp;quot;&amp;gt;
+&amp;lt;h3 id=&amp;quot;_prochaines_étapes&amp;quot;&amp;gt;&amp;lt;a class=&amp;quot;anchor&amp;quot; href=&amp;quot;#_prochaines_étapes&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;12.1. Prochaines Étapes&amp;lt;/h3&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Phase 1&amp;lt;/strong&amp;gt; : Implémentation du core avec PyMonade&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Phase 2&amp;lt;/strong&amp;gt; : Intégration Spotify avec cache intelligent&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Phase 3&amp;lt;/strong&amp;gt; : Solution YouTube résiliente&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Phase 4&amp;lt;/strong&amp;gt; : Features avancées et optimisation&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Cette fondation conceptuelle solide nous permettra de naviguer les défis techniques tout en livrant une expérience utilisateur exceptionnelle.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;hr&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Cet article sera suivi d&amp;amp;#8217;une série technique détaillant l&amp;amp;#8217;implémentation de chaque composant avec exemples de code et patterns fonctionnels.&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;</description>
+        </item><item>
+            <title>Fourth Post</title>
+            <link >https://pages-content.github.io//blog/2013/fourth-post.html</link>
+            <pubDate>Thu, 17 Oct 2013 00:00:00 +0000</pubDate>
+            <guid isPermaLink="false">blog/2013/fourth-post.html</guid>
+            <description>&amp;lt;div class=&amp;quot;imageblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;quot;/img/beach.jpg&amp;quot; alt=&amp;quot;Beach&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel diam purus. Curabitur ut nisi lacus.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;http://example.org&amp;quot; class=&amp;quot;bare&amp;quot;&amp;gt;http://example.org&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;http://example.org&amp;quot;&amp;gt;Example.org&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Nam id nisl quam. Donec a lorem sit amet libero pretium vulputate vel ut purus. Suspendisse leo arcu,
+mattis et imperdiet luctus, pulvinar vitae mi. Quisque fermentum sollicitudin feugiat. Mauris nec leo
+ligula. Vestibulum tristique odio ut risus ultricies a hendrerit quam iaculis. Duis tempor elit sit amet
+ligula vehicula et iaculis sem placerat. Fusce dictum, metus at volutpat lacinia, elit massa auctor risus,
+id auctor arcu enim eu augue. Donec ultrices turpis in mi imperdiet ac venenatis sapien sodales. In
+consequat imperdiet nunc quis bibendum. Nulla semper, erat quis ornare tristique, lectus massa posuere
+libero, ut vehicula lectus nunc ut lorem. Aliquam erat volutpat.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;</description>
+        </item><item>
+            <title>Third Post</title>
+            <link >https://pages-content.github.io//blog/2013/third-post.html</link>
+            <pubDate>Thu, 26 Sep 2013 00:00:00 +0000</pubDate>
+            <guid isPermaLink="false">blog/2013/third-post.html</guid>
+            <description>&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel diam purus. Curabitur ut nisi lacus.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;ulist&amp;quot;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;http://example.org&amp;quot; class=&amp;quot;bare&amp;quot;&amp;gt;http://example.org&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;http://example.org&amp;quot;&amp;gt;Example.org&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Nam id nisl quam. Donec a lorem sit amet libero pretium vulputate vel ut purus. Suspendisse leo arcu,
+mattis et imperdiet luctus, pulvinar vitae mi. Quisque fermentum sollicitudin feugiat. Mauris nec leo
+ligula. Vestibulum tristique odio ut risus ultricies a hendrerit quam iaculis. Duis tempor elit sit amet
+ligula vehicula et iaculis sem placerat. Fusce dictum, metus at volutpat lacinia, elit massa auctor risus,
+id auctor arcu enim eu augue. Donec ultrices turpis in mi imperdiet ac venenatis sapien sodales. In
+consequat imperdiet nunc quis bibendum. Nulla semper, erat quis ornare tristique, lectus massa posuere
+libero, ut vehicula lectus nunc ut lorem. Aliquam erat volutpat.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;</description>
+        </item><item>
+            <title>Second Post</title>
+            <link >https://pages-content.github.io//blog/2013/second-post.html</link>
+            <pubDate>Sun, 25 Aug 2013 00:00:00 +0000</pubDate>
+            <guid isPermaLink="false">blog/2013/second-post.html</guid>
+            <description>&amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel diam purus. Curabitur ut nisi lacus.&amp;lt;/p&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;http://example.org&amp;quot;&amp;gt;http://example.org&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;http://example.org&amp;quot;&amp;gt;Example.org&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;p&amp;gt;Nam id nisl quam. Donec a lorem sit amet libero pretium vulputate vel ut purus. Suspendisse leo arcu,&amp;lt;br /&amp;gt;
+mattis et imperdiet luctus, pulvinar vitae mi. Quisque fermentum sollicitudin feugiat. Mauris nec leo&amp;lt;br /&amp;gt;
+ligula. Vestibulum tristique odio ut risus ultricies a hendrerit quam iaculis. Duis tempor elit sit amet&amp;lt;br /&amp;gt;
+ligula vehicula et iaculis sem placerat. Fusce dictum, metus at volutpat lacinia, elit massa auctor risus,&amp;lt;br /&amp;gt;
+id auctor arcu enim eu augue. Donec ultrices turpis in mi imperdiet ac venenatis sapien sodales. In&amp;lt;br /&amp;gt;
+consequat imperdiet nunc quis bibendum. Nulla semper, erat quis ornare tristique, lectus massa posuere&amp;lt;br /&amp;gt;
+libero, ut vehicula lectus nunc ut lorem. Aliquam erat volutpat.&amp;lt;/p&amp;gt;
+</description>
+        </item><item>
+            <title>First Post</title>
+            <link >https://pages-content.github.io//blog/2013/first-post.html</link>
+            <pubDate>Wed, 24 Jul 2013 00:00:00 +0000</pubDate>
+            <guid isPermaLink="false">blog/2013/first-post.html</guid>
+            <description>
+&amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel diam purus. Curabitur ut nisi lacus.&amp;lt;/p&amp;gt;
+
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;http://example.org&amp;quot;&amp;gt;http://example.org&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;http://example.org&amp;quot;&amp;gt;Example.org&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+
+&amp;lt;p&amp;gt;Nam id nisl quam. Donec a lorem sit amet libero pretium vulputate vel ut purus. Suspendisse leo arcu, 
+mattis et imperdiet luctus, pulvinar vitae mi. Quisque fermentum sollicitudin feugiat. Mauris nec leo 
+ligula. Vestibulum tristique odio ut risus ultricies a hendrerit quam iaculis. Duis tempor elit sit amet 
+ligula vehicula et iaculis sem placerat. Fusce dictum, metus at volutpat lacinia, elit massa auctor risus, 
+id auctor arcu enim eu augue. Donec ultrices turpis in mi imperdiet ac venenatis sapien sodales.&amp;lt;/p&amp;gt; 
+
+&amp;lt;pre class=&amp;quot;prettyprint&amp;quot;&amp;gt;
+&amp;lt;code&amp;gt;
+package org.jbake;
+
+public class Oven {
+	public static void main(String[] args) {
+		System.out.print(&amp;quot;Baking!&amp;quot;);
+  }
+}
+&amp;lt;/code&amp;gt;
+&amp;lt;/pre&amp;gt;
+
+&amp;lt;p&amp;gt;In consequat imperdiet nunc quis bibendum. Nulla semper, erat quis ornare tristique, lectus massa posuere 
+libero, ut vehicula lectus nunc ut lorem. Aliquam erat volutpat.&amp;lt;/p&amp;gt;
+</description>
+        </item>
+
+    </channel>
+</rss>
